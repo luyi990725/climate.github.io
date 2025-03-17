@@ -12,6 +12,10 @@
         #result {
             margin-top: 20px;
         }
+        input[type="text"] {
+            padding: 8px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -19,35 +23,41 @@
     <input type="text" id="search-box" placeholder="Search..." />
     <div id="result"></div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
     <script>
-        // 将 Excel 转换后的 JSON 数据嵌入到前端代码中
-        const excelData = [
-            { "A": "纽约", "B": "New York Data" },
-            { "A": "洛杉矶", "B": "LA Data" },
-            { "A": "上海", "B": "Shanghai Data" }
-        ];
+        // 加载 GitHub 上的 Excel 文件
+        fetch('https://raw.githubusercontent.com/luyi990725/your-repo/main/github.xlsx')
+            .then(response => response.arrayBuffer())
+            .then(data => {
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheetName = workbook.SheetNames[0];  // 获取第一个工作表
+                const sheet = workbook.Sheets[sheetName];  // 获取该工作表的内容
+                const excelData = XLSX.utils.sheet_to_json(sheet, { header: 1 });  // 将工作表内容转换为 JSON 数据
 
-        // 搜索功能
-        document.getElementById('search-box').addEventListener('input', function () {
-            const searchText = this.value.toLowerCase();
-            const result = excelData.filter(row => row.A && row.A.toLowerCase().includes(searchText));
-            displayResults(result);
-        });
-
-        function displayResults(results) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '';
-
-            if (results.length > 0) {
-                results.forEach(row => {
-                    const resultItem = document.createElement('p');
-                    resultItem.textContent = `Found: ${row.A} → ${row.B}`;
-                    resultDiv.appendChild(resultItem);
+                // 搜索功能
+                document.getElementById('search-box').addEventListener('input', function () {
+                    const searchText = this.value.toLowerCase();
+                    const result = excelData.filter(row => row[0] && row[0].toString().toLowerCase().includes(searchText));
+                    displayResults(result);
                 });
-            } else {
-                resultDiv.textContent = 'No results found.';
-            }
-        }
+
+                function displayResults(results) {
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.innerHTML = '';
+
+                    if (results.length > 0) {
+                        results.forEach(row => {
+                            const resultItem = document.createElement('p');
+                            resultItem.textContent = `Found: ${row[0]} → ${row[1]}`;
+                            resultDiv.appendChild(resultItem);
+                        });
+                    } else {
+                        resultDiv.textContent = 'No results found.';
+                    }
+                }
+
+            })
+            .catch(error => console.error('Error loading Excel file:', error));
     </script>
 </body>
 </html>

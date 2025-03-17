@@ -53,6 +53,15 @@
             }
         });
 
+        // 检查是否有之前的搜索记录
+        const previousSearch = localStorage.getItem('searchResult');
+        if (previousSearch) {
+            // 如果有保存的结果，直接展示，并禁用所有搜索操作
+            displayResults(JSON.parse(previousSearch));
+            citySelect.disabled = true;
+            document.getElementById('search-btn').disabled = true;
+        }
+
         // 点击“确定”按钮后触发搜索
         document.getElementById('search-btn').addEventListener('click', function () {
             const selectedCity = citySelect.value.trim();  // 获取选择的城市
@@ -70,7 +79,18 @@
                 return cleanText(row.A).includes(cleanText(selectedCity));  // 搜索 'A' 列（城市名）
             });
 
+            // 将结果存储到 localStorage
+            if (result.length > 0) {
+                localStorage.setItem('searchResult', JSON.stringify(result)); // 保存搜索结果
+            } else {
+                localStorage.removeItem('searchResult'); // 如果没有结果，则移除之前保存的结果
+            }
+
             displayResults(result);
+
+            // 禁用下拉框和按钮，防止再次搜索
+            citySelect.disabled = true;
+            document.getElementById('search-btn').disabled = true;
         });
 
         // 显示搜索结果
@@ -79,19 +99,12 @@
             resultDiv.innerHTML = '';  // 清空之前的结果
             resultDiv.style.display = 'block';  // 显示结果区域
 
-            const citySelect = document.getElementById('city-select');
-            const searchBtn = document.getElementById('search-btn');
-
             if (results.length > 0) {
                 results.forEach(row => {
                     const resultItem = document.createElement('p');
                     resultItem.textContent = `Found: ${row.A} → ${row.B}`;
                     resultDiv.appendChild(resultItem);
                 });
-
-                // 如果有结果，禁用下拉框和按钮
-                citySelect.disabled = true;
-                searchBtn.disabled = true;  // 禁用“确定”按钮
             } else {
                 resultDiv.textContent = 'No results found.';
             }

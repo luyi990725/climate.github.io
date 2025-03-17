@@ -29,7 +29,7 @@
     <div id="result" style="display: none;"></div> <!-- 初始时不显示结果 -->
 
     <script>
-        // 将 Excel 文件转换为 JSON 格式后嵌入的内容
+        // 按照你提供的格式，数据数组
         const excelData = [
  {
    "A": "规格值",
@@ -1144,7 +1144,10 @@
             }
 
             // 否则进行搜索并显示结果
-            const result = excelData.filter(row => row.City && row.City.toLowerCase().includes(searchText));
+            const result = excelData.filter(row => {
+                return row.A && row.A.toLowerCase().includes(searchText);  // 搜索 'A' 列（城市名）
+            });
+
             displayResults(result);
         });
 
@@ -1157,7 +1160,7 @@
             if (results.length > 0) {
                 results.forEach(row => {
                     const resultItem = document.createElement('p');
-                    resultItem.textContent = `Found: ${row.City} → ${row.Link}`;
+                    resultItem.textContent = `Found: ${row.A} → ${row.B}`;
                     resultDiv.appendChild(resultItem);
                 });
             } else {

@@ -16,12 +16,17 @@
             padding: 8px;
             margin-bottom: 10px;
         }
+        button {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <h1>Excel Search</h1>
     <input type="text" id="search-box" placeholder="Search..." />
-    <div id="result"></div>
+    <button id="search-btn">Search</button>
+    <div id="result" style="display: none;"></div> <!-- 初始时不显示结果 -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
     <script>
@@ -36,9 +41,9 @@
                 const sheet = workbook.Sheets[sheetName];  // 获取该工作表的内容
                 excelData = XLSX.utils.sheet_to_json(sheet, { header: 1 });  // 将工作表内容转换为 JSON 数据
 
-                // 搜索功能
-                document.getElementById('search-box').addEventListener('input', function () {
-                    const searchText = this.value.toLowerCase();
+                // 点击搜索按钮后触发搜索
+                document.getElementById('search-btn').addEventListener('click', function () {
+                    const searchText = document.getElementById('search-box').value.toLowerCase();
                     const result = excelData.filter(row => row[0] && row[0].toString().toLowerCase().includes(searchText));
                     displayResults(result);
                 });
@@ -47,6 +52,7 @@
                 function displayResults(results) {
                     const resultDiv = document.getElementById('result');
                     resultDiv.innerHTML = '';  // 清空之前的结果
+                    resultDiv.style.display = 'block';  // 显示结果区域
 
                     if (results.length > 0) {
                         results.forEach(row => {

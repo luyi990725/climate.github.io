@@ -43,7 +43,15 @@
 
                 // 点击搜索按钮后触发搜索
                 document.getElementById('search-btn').addEventListener('click', function () {
-                    const searchText = document.getElementById('search-box').value.toLowerCase();
+                    const searchText = document.getElementById('search-box').value.trim().toLowerCase();
+
+                    // 如果搜索框为空，不显示任何结果
+                    if (searchText === '') {
+                        document.getElementById('result').style.display = 'none';
+                        return;
+                    }
+
+                    // 否则进行搜索并显示结果
                     const result = excelData.filter(row => row[0] && row[0].toString().toLowerCase().includes(searchText));
                     displayResults(result);
                 });

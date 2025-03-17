@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Excel Search</h1>
+    <input type="text" id="search-box" placeholder="Search..." />
+    <div id="result"></div>
+
+    <script>
+        // 将 Excel 转换后的 JSON 数据嵌入到前端代码中
+        const excelData = [
+            { "A": "纽约", "B": "New York Data" },
+            { "A": "洛杉矶", "B": "LA Data" },
+            { "A": "上海", "B": "Shanghai Data" }
+        ];
+
+        // 搜索功能
+        document.getElementById('search-box').addEventListener('input', function () {
+            const searchText = this.value.toLowerCase();
+            const result = excelData.filter(row => row.A && row.A.toLowerCase().includes(searchText));
+            displayResults(result);
+        });
+
+        function displayResults(results) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+
+            if (results.length > 0) {
+                results.forEach(row => {
+                    const resultItem = document.createElement('p');
+                    resultItem.textContent = `Found: ${row.A} → ${row.B}`;
+                    resultDiv.appendChild(resultItem);
+                });
+            } else {
+                resultDiv.textContent = 'No results found.';
+            }
+        }
+    </script>
+</body>
+</html>

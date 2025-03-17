@@ -12,7 +12,7 @@
         #result {
             margin-top: 20px;
         }
-        input[type="text"] {
+        select {
             padding: 8px;
             margin-bottom: 10px;
         }
@@ -24,8 +24,10 @@
 </head>
 <body>
     <h1>Excel Search</h1>
-    <input type="text" id="search-box" placeholder="Search..." />
-    <button id="search-btn">Search</button>
+    <select id="city-select">
+        <option value="">Select a city...</option>
+    </select>
+    <button id="search-btn">确定</button>
     <div id="result" style="display: none;"></div> <!-- 初始时不显示结果 -->
 
     <script>
@@ -40,22 +42,32 @@
         // 清理文本，去除空格并转换为小写
         const cleanText = (text) => text ? text.trim().toLowerCase() : '';
 
-        // 点击搜索按钮后触发搜索
+        // 填充下拉框（城市列表）
+        const citySelect = document.getElementById('city-select');
+        excelData.forEach(row => {
+            if (row.A && row.A !== '规格值') {
+                const option = document.createElement('option');
+                option.value = row.A;
+                option.textContent = row.A;
+                citySelect.appendChild(option);
+            }
+        });
+
+        // 点击“确定”按钮后触发搜索
         document.getElementById('search-btn').addEventListener('click', function () {
-            const searchText = cleanText(document.getElementById('search-box').value);  // 获取搜索文本并清理
+            const selectedCity = citySelect.value.trim();  // 获取选择的城市
 
-            console.log('Searching for:', searchText);  // 打印搜索内容
+            console.log('Searching for:', selectedCity);  // 打印搜索内容
 
-            // 如果搜索框为空，不显示任何结果
-            if (searchText === '') {
+            // 如果没有选择城市，不显示任何结果
+            if (!selectedCity) {
                 document.getElementById('result').style.display = 'none';
                 return;
             }
 
             // 否则进行搜索并显示结果
             const result = excelData.filter(row => {
-                console.log('Checking row:', row.A);  // 打印每一行的 'A' 字段
-                return cleanText(row.A).includes(searchText);  // 搜索 'A' 列（城市名）
+                return cleanText(row.A).includes(cleanText(selectedCity));  // 搜索 'A' 列（城市名）
             });
 
             displayResults(result);
@@ -67,7 +79,7 @@
             resultDiv.innerHTML = '';  // 清空之前的结果
             resultDiv.style.display = 'block';  // 显示结果区域
 
-            const searchBox = document.getElementById('search-box');
+            const citySelect = document.getElementById('city-select');
             const searchBtn = document.getElementById('search-btn');
 
             if (results.length > 0) {
@@ -77,9 +89,9 @@
                     resultDiv.appendChild(resultItem);
                 });
 
-                // 如果有结果，禁用搜索框和按钮
-                searchBox.disabled = true;
-                searchBtn.remove();  // 删除搜索按钮
+                // 如果有结果，禁用下拉框和按钮
+                citySelect.disabled = true;
+                searchBtn.disabled = true;  // 禁用“确定”按钮
             } else {
                 resultDiv.textContent = 'No results found.';
             }

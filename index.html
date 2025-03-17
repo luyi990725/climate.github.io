@@ -23,16 +23,24 @@
     <input type="text" id="search-box" placeholder="Search..." />
     <div id="result"></div>
 
+    <!-- 数据存储区域，保持隐藏 -->
+    <div id="excel-data" style="display:none;"></div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
     <script>
-        // 加载 GitHub 上的 Excel 文件
+        let excelData = [];  // 存储 Excel 数据
+
+        // 加载 Excel 文件（在 GitHub 上）
         fetch('https://raw.githubusercontent.com/luyi990725/climate.github.io/main/github.xlsx')
             .then(response => response.arrayBuffer())
             .then(data => {
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheetName = workbook.SheetNames[0];  // 获取第一个工作表
                 const sheet = workbook.Sheets[sheetName];  // 获取该工作表的内容
-                const excelData = XLSX.utils.sheet_to_json(sheet, { header: 1 });  // 将工作表内容转换为 JSON 数据
+                excelData = XLSX.utils.sheet_to_json(sheet, { header: 1 });  // 将工作表内容转换为 JSON 数据
+
+                // Excel 数据在内存中，不在页面上显示
+                document.getElementById('excel-data').innerText = JSON.stringify(excelData);
 
                 // 搜索功能
                 document.getElementById('search-box').addEventListener('input', function () {
@@ -41,9 +49,10 @@
                     displayResults(result);
                 });
 
+                // 显示搜索结果
                 function displayResults(results) {
                     const resultDiv = document.getElementById('result');
-                    resultDiv.innerHTML = '';
+                    resultDiv.innerHTML = '';  // 清空之前的结果
 
                     if (results.length > 0) {
                         results.forEach(row => {
@@ -55,7 +64,6 @@
                         resultDiv.textContent = 'No results found.';
                     }
                 }
-
             })
             .catch(error => console.error('Error loading Excel file:', error));
     </script>

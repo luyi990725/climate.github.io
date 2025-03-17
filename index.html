@@ -26,7 +26,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
     <script>
         // 加载 GitHub 上的 Excel 文件
-        fetch('https://raw.githubusercontent.com/luyi990725/climate/main/github.xlsx')
+        fetch('https://raw.githubusercontent.com/luyi990725/climate.github.io/main/github.xlsx')
             .then(response => response.arrayBuffer())
             .then(data => {
                 const workbook = XLSX.read(data, { type: 'array' });

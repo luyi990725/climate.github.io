@@ -1163,18 +1163,59 @@
  {
    "A": "重庆酉阳",
    "B": "百度网盘链接：https://pan.baidu.com/s/1GSJFQTR9H9dvwwXj4fO4PQ?pwd=0331；密码：0331。【祝您交图愉快！记得确认收货哦！】"
+ },
+ {
+   "A": "安徽芜湖",
+   "B": "百度网盘链接：https://pan.baidu.com/s/1Te2EHHZXVzc1H8JI6nZbAA?pwd=0331；密码：0331。【祝您交图愉快！记得确认收货哦！】"
+ },
+ {
+   "A": "澳门澳门",
+   "B": "百度网盘链接：https://pan.baidu.com/s/1cSO00ooWZdErB9W2jNi0iw?pwd=0331；密码：0331。【祝您交图愉快！记得确认收货哦！】"
+ },
+ {
+   "A": "福建泉州",
+   "B": "百度网盘链接：https://pan.baidu.com/s/1lfdRc3ZwIxjLiskT87WwFQ?pwd=0331；密码：0331。【祝您交图愉快！记得确认收货哦！】"
+ },
+ {
+   "A": "江苏苏州",
+   "B": "百度网盘链接：https://pan.baidu.com/s/1w_lUttBDZs_c9yehQ3D9HA?pwd=0331；密码：0331。【祝您交图愉快！记得确认收货哦！】"
+ },
+ {
+   "A": "江西邵阳",
+   "B": "百度网盘链接：https://pan.baidu.com/s/1j9_uBt4yP_MaWrsMf1sD5Q?pwd=0331；密码：0331。【祝您交图愉快！记得确认收货哦！】"
+ },
+ {
+   "A": "山东青岛",
+   "B": "百度网盘链接：https://pan.baidu.com/s/1WTMm4H9gnu699mwUuzpM9w?pwd=0331；密码：0331。【祝您交图愉快！记得确认收货哦！】"
+ },
+ {
+   "A": "山东烟台",
+   "B": "百度网盘链接：https://pan.baidu.com/s/1wEYM0eRWQ39jBjfrTBZ6Cg?pwd=0331；密码：0331。【祝您交图愉快！记得确认收货哦！】"
+ },
+ {
+   "A": "云南大理",
+   "B": "百度网盘链接：https://pan.baidu.com/s/1t1D6C9kfFUpjmh2gDgSfmw?pwd=0331；密码：0331。【祝您交图愉快！记得确认收货哦！】"
+ },
+ {
+   "A": "浙江宁波",
+   "B": "百度网盘链接：https://pan.baidu.com/s/1ROY2NLWOBH9SpJRZFg28FA?pwd=0331；密码：0331。【祝您交图愉快！记得确认收货哦！】"
  }
 ];
 
-        // 填充下拉框
+ // 填充下拉框，按城市名称排序
         const citySelect = document.getElementById('city-select');
-        excelData.forEach(row => {
-            if (row.A && row.A !== '规格值') {
-                const option = document.createElement('option');
-                option.value = row.A;
-                option.textContent = row.A;
-                citySelect.appendChild(option);
-            }
+        
+        // 排序城市名称（按字母顺序）
+        const sortedCities = excelData
+            .filter(row => row.A && row.A !== '规格值')  // 过滤掉不需要的行
+            .sort((a, b) => a.A.localeCompare(b.A));     // 按城市名称进行排序
+
+        // 添加排序后的城市到下拉框
+        sortedCities.forEach(row => {
+            const option = document.createElement('option');
+            option.value = row.A;
+            option.textContent = row.A;
+            citySelect.appendChild(option);
         });
 
         // 检查是否有之前的搜索记录

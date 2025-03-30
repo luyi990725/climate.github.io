@@ -5,61 +5,194 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>气候分析图获取</title>
     <style>
+        :root {
+            --primary-color: #2ecc71;
+            --secondary-color: #27ae60;
+            --background-color: #f9fefc;
+            --text-color: #2c3e50;
+            --shadow: 0 4px 6px rgba(46, 204, 113, 0.1);
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
             padding: 20px;
-            max-width: 500px;
+            max-width: 800px;
             margin: auto;
             text-align: center;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
         }
-        #result {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin: 2rem auto;
         }
-        select, button {
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 10px;
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
             width: 100%;
-            max-width: 300px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 2px;
         }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
+
+        .eco-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin: 1rem 0;
         }
-        button:disabled {
-            background-color: #aaa;
-            cursor: not-allowed;
-        }
+
         .steps {
             text-align: left;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #eef;
-            border-radius: 5px;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(145deg, #e6ffef, #ffffff);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-item {
+            margin: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .step-item::before {
+            content: '🌱';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+
+        .warning {
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #fdf2f2;
+            border-radius: 8px;
+        }
+
+        select {
+            padding: 12px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 400px;
+            margin: 1rem 0;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            background: white;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            border-color: var(--secondary-color);
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 400px;
+            margin: 1rem 0;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #result {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: white;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        .result-item {
+            text-align: left;
+            padding: 1rem;
+            border-left: 4px solid var(--primary-color);
+            margin: 1rem 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>气候分析图获取</h1>
-    <div class="steps">
-        <p><strong>步骤1：</strong> 选择想要的城市</p>
-        <p><strong>步骤2：</strong> 点击“确认”获取网盘链接</p>
-        <p><strong>步骤3：</strong> 复制链接进行下载</p>
-        <p><strong style="color:red;">（！！！城市只能选择一次哦，祝您交图愉快！！！）</strong></p>
+    <div class="container">
+        <h1>气候分析图获取</h1>
+        <div class="eco-icon">🌍</div>
+        
+        <div class="steps">
+            <div class="step-item">
+                <strong>步骤1：</strong> 选择您所需的城市气候数据
+            </div>
+            <div class="step-item">
+                <strong>步骤2：</strong> 点击"获取分析图"按钮
+            </div>
+            <div class="step-item">
+                <strong>步骤3：</strong> 复制网盘链接下载分析图
+            </div>
+            <div class="warning">
+                ⚠️ 注意：每个城市仅可选择一次，请谨慎选择！
+            </div>
+        </div>
+        
+        <select id="city-select">
+            <option value="">请选择城市...</option>
+        </select>
+        
+        <button id="search-btn">获取分析图</button>
+        
+        <div id="result"></div>
     </div>
-    
-    <select id="city-select">
-        <option value="">选择城市...</option>
-    </select>
-    <button id="search-btn">确认</button>
-    <div id="result" style="display: none;"></div> <!-- 初始时不显示结果 -->
 
     <script>
         // 数据
